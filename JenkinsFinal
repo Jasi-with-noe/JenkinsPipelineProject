@@ -59,28 +59,25 @@ pipeline {
         always {
             emailext(
                 to: 'jasmin.smallu2001@gmail.com',
-                subject: 'Pipeline Status: Build #${BUILD_NUMBER}',
-                body: "The pipeline has finished.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
                 attachLog: true,
-                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
             )
         }
         success {
             emailext(
                 to: 'jasmin.smallu2001@gmail.com',
                 subject: 'Pipeline Success: Build #${BUILD_NUMBER}',
-                body: "The pipeline succeeded.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
-                attachLog: true,
-                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+                body: "The pipeline succeeded.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}",
+                attachLog: true
             )
         }
         failure {
             emailext(
                 to: 'jasmin.smallu2001@gmail.com',
                 subject: 'Pipeline Failure: Build #${BUILD_NUMBER}',
-                body: "The pipeline failed.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
-                attachLog: true,
-                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+                body: "The pipeline failed.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}",
+                attachLog: true
             )
         }
     }
