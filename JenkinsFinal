@@ -58,7 +58,7 @@ pipeline {
     post {
         always {
             emailext(
-                to: 'zeknogefyo@gufum.com',
+                to: 'jasmin.smallu2001@gmail.com',
                 attachLog: true,
                 body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
                 subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
@@ -66,7 +66,7 @@ pipeline {
         }
         success {
             emailext(
-                to: 'zeknogefyo@gufum.com',
+                to: 'jasmin.smallu2001@gmail.com',
                 subject: 'Pipeline Success: Build #${BUILD_NUMBER}',
                 body: "The pipeline succeeded.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}",
                 attachLog: true
@@ -74,7 +74,7 @@ pipeline {
         }
         failure {
             emailext(
-                to: 'zeknogefyo@gufum.com',
+                to: 'jasmin.smallu2001@gmail.com',
                 subject: 'Pipeline Failure: Build #${BUILD_NUMBER}',
                 body: "The pipeline failed.\n\nJob: ${JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}",
                 attachLog: true
