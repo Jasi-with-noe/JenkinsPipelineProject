@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying the application to a staging server (e.g., AWS EC2 instance)"
+                echo "Deploying the application to a staging server (AWS EC2 instance)"
                 // Example: sh 'deploy-to-staging.sh' or similar deployment script
             }
         }
@@ -57,7 +57,6 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline finished."
             emailext(
                 to: 'jasmin.smallu2001@gmail.com',
                 subject: 'Pipeline Status: ${JENKINS_JOB_NAME} - ${BUILD_NUMBER}',
