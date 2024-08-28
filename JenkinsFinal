@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    environment {
+        DIRECTORY_PATH = 'D:\\others'
+        TESTING_ENVIRONMENT = 'Testing'
+        PRODUCTION_ENVIRONMENT = 'AWS EC2'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Fetching the source code from the directory path specified by DIRECTORY_PATH environment variable: ${env.DIRECTORY_PATH}"
+                echo "Building the code using a build automation tool such as Maven or Gradle"
+                // Example: sh 'mvn clean install' or 'gradle build'
+            }
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo "Running unit tests to ensure the code functions as expected"
+                echo "Running integration tests to ensure the different components of the application work together"
+                // Example: sh 'mvn test' or 'gradle test'
+                // Example for integration tests: sh 'mvn verify' or 'gradle integrationTest'
+            }
+        }
+        stage('Code Analysis') {
+            steps {
+                echo "Performing code quality analysis using a tool such as SonarQube"
+                // Example: sh 'mvn sonar:sonar' or 'sonar-scanner'
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                echo "Performing a security scan to identify any vulnerabilities using a tool like OWASP ZAP or Checkmarx"
+                // Example: sh 'owasp-zap -cmd -quickurl http://example.com' or similar command
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploying the application to a staging server (e.g., AWS EC2 instance)"
+                // Example: sh 'deploy-to-staging.sh' or similar deployment script
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo "Running integration tests in the staging environment to ensure the application functions as expected"
+                // Example: sh 'integration-tests-staging.sh' or similar script
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploying the application to the production environment (AWS EC2 instance)"
+                // Example: sh 'deploy-to-production.sh' or similar deployment script
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished."
+            emailext(
+                to: 'jasmin.smallu2001@gmail.com',
+                subject: 'Pipeline Status: ${JENKINS_JOB_NAME} - ${BUILD_NUMBER}',
+                body: "The pipeline has finished.\n\nJob: ${JENKINS_JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
+                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+            )
+        }
+        success {
+            emailext(
+                to: 'jasmin.smallu2001@gmail.com',
+                subject: 'Pipeline Success: ${JENKINS_JOB_NAME} - ${BUILD_NUMBER}',
+                body: "The pipeline succeeded.\n\nJob: ${JENKINS_JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
+                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+            )
+        }
+        failure {
+            emailext(
+                to: 'jasmin.smallu2001@gmail.com',
+                subject: 'Pipeline Failure: ${JENKINS_JOB_NAME} - ${BUILD_NUMBER}',
+                body: "The pipeline failed.\n\nJob: ${JENKINS_JOB_NAME}\nBuild Number: ${BUILD_NUMBER}\nStatus: ${BUILD_STATUS}",
+                attachmentsPattern: '**/test-results/*.xml, **/security-scan/*.xml'
+            )
+        }
+    }
+}
